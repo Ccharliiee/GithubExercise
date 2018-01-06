@@ -8,17 +8,26 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
+markdown
 Syntax highlighted code block
 
+
+
+
+
 # Header 1 TEST
+
 ## Header 2 TEST
 ### Header 3 TEST
 
 
-- Bulleted TEST
+- Bulleted 
+TEST
+TEST
 
-- List TEST
+- List 
+ *TEST
+*TEST
 
 
 1. Numbered TEST
@@ -28,8 +37,8 @@ Syntax highlighted code block
 
 **Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
-```
+[Link](https://en.wikipedia.org/wiki/P_versus_NP_problem) and ![Image](src)
+
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
@@ -41,4 +50,4 @@ Your Pages site will use the layout and styles from the Jekyll theme you have se
 
 Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
 
-Hello world
+## Header 2 TEST Hello world
