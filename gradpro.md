@@ -1,33 +1,35 @@
 let k=2^{d-1} and s(d)=(k…..k)   d < sum x_i leq \leq dk/2 
 
 
-1. Vcand = lift  a(d-1) to (0,a(d-1)), (0, s(d-1)-a(d-1))
+1 .   **Vred** = lift  a(d-1) to (0,a(d-1)), (0, s(d-1)-a(d-1))
 
 lift their decomposition as well
 
-2. **Vcand** = Vcand + 1111..d
+2 .  **Vcand** = Vred + 1111..d
 
-3. Verteices = some points are known to be vertices for any d 
-0….0, 0…01, 1…1d, 0k/2…k/2, k/2-1 … k/2-1 k-1(d<=4), **_Vcand?_**
+3 . Verteices = some points are known to be vertices for any d 
+0….0, 0…01, 1…1d, 0k/2…k/2, k/2-1 … k/2-1 k-1(d<=4), **_Vcand_**
 
-4. nonVerteices = 11111x (x<d)is never a vertex unless x=d (two decomposition are possible) 
+4 . nonVerteices = 11111x (x<d)is never a vertex 
+unless x=d (two decomposition are possible) 
 
-5. initiate undetermined list **Vund**(Vcand - known determined points
+5 . initiate undetermined list **Vund**(Vcand - known determined points
 
 known determined points = _(the origin , 0….01,  0k/2…k/2 )_
 
-6. for each vertex in Vund, add edges(generators) up to permutations  
+6 . for each vertex in Vund, add edges(generators) up to permutations  
 until all points in Vund are determined(their neighborhood are verfied)
 
-find edges: from generator first remove their decomposition, then reduce the 
-remaining edges up to permutation of the current undetermined point by getting 
-the index fo permutation first and choosing the smallest permutation available
+find edges: from generator first remove their decomposition, 
+then reduce the remaining edges up to permutation of the current undetermined point 
+by getting the index fo permutation first 
+and choosing the smallest permutation available
 
-7. check whether it's in Verteices, nonVerteices, red(0/k), if yes,do 6. 
+7 . check whether it's in Verteices, nonVerteices, red, if yes,do 6(continue). 
 
-8. check sum x_i <= dk/2, if no, remove it. do 6
+8 . check sum x_i <= dk/2, if no, remove it. do 6
 
-9. if no in 7, check cone membership, if yes,move it to nonVerteices, do 6
+9 . if no in 7, check cone membership, if yes,move it to nonVerteices, do 6
 
 
  _1.1cone of apex 0 and base formed the d vertices 11…11d_
@@ -123,4 +125,13 @@ sum x_i \leq  dk/2
 sum x_i \neq i0 \leq ((d-2) + 2/(k+2) )x<sub>i0</sub> + k(1 - 2/k+2)   for i0 =1….d  
 a1 = - (-d+2 - 2/(k+2)) a2
 
-10. if no in 8, check decomposation number, if > 1,move it to nonVerteices, do 6
+10 . if no in 9, check decomposation number, if > 1,move it to nonVerteices, 
+do 6
+
+**check decomposation**
+
+we decompose the starting vertex (maintain list of dcomposition/eps
+of starting vertex), than add edges(e_l， store the points with eps:
+5 choose 1 5 choose 2 5 choose 3 5 choose 4 5 choose 5),
+We store the index as key,eps value as value in a dict)
+and check the eps sum from d choose 2 to d choose d
