@@ -1,7 +1,8 @@
 let k=2^{d-1} and s(d)=(k…..k)   d < sum x_i leq \leq dk/2 
 
 
-1 .   **Vred** = lift  a(d-1) to (0,a(d-1)), (0, s(d-1)-a(d-1))
+1 .   **Vred** = lift  a(d-1) to (0,a(d-1)), (0, s(d-1)-a(d-1)) 
+'(0, s(d-1)-a(d-1)) need to be sorted'
 
 lift their decomposition as well
 
@@ -42,7 +43,7 @@ _1.2 cone of apex (k,k,k,....) and base formed the d vertices 11…11d_
 
  sum x_i \geq 2d-1
 
- sum x_i \neq i0 \leq ((k-2)(d-1)(x_i0-1))/k-1 - 2(d-1)   for i0 =1….d  
+ sum x_i \neq i0 \leq ((k-2)(d-1)(x_i0-1))/k-1 +2(d-1)   for i0 =1….d  
  
  
  _2.1cone of apex 0 and base formed by the d vertices 0k/2….k/2_
@@ -69,7 +70,7 @@ sum x_i \neq i0 \leq (d-1-1/k)x<sub>i0</sub> + 1   for i0 =1….d  a1=-da2
  
  sum x_i \leq (d-1)k/2 +d  (k/2 +1)(d-1) +1
  
- sum x_i \neq i0 \leq (1/(k/2 +1) + d-2)x<sub>i0</sub> + 1   for i0 =1….d  
+ sum x_i \neq i0 \geq (1/(k/2 +1) + d-2)x<sub>i0</sub>    for i0 =1….d  
  a1=-(1/(k/2 +1) + d-2)a2
 
  _4.2 cone of apex (k,k,k,....)(only for d > 4) no need for (k,k,k,....) and base formed 
@@ -80,7 +81,7 @@ sum x_i \geq (d-1)k/2 +d  (k/2 +1)(d-1) +1
 sum x_i \neq i0 \geq (d+ 2/(k-2) )x<sub>i0</sub> - 2k/(k-2) -k   for i0 =1….d  
 
 
-_5 cone of apex 0 and base formed by the d vertices k-1 .... k_
+_5 cone of apex 0 and base formed by the d vertices k-1 k.... k_
 
 ~~sum x_i \leq dk -1~~
  
@@ -88,15 +89,15 @@ sum x_i \neq i0 \geq (d-1 -1/k)x<sub>i0</sub>   for i0 =1….d
 
 _6.1 cone of apex 0  and base formed by the d vertices k-1…k-1,k-d_
 
-sum x_i \leq d(k-2)
+sum x_i \leq dk-2d-1 (> dk/2 when d>3, could skip then)
  
 sum x_i \neq i0 \geq ((k-2)(d-1)/(k-1) x<sub>i0</sub>   for i0 =1….d  
 a1 = -(k-2)(d-1)/(k-1) a2
 
-_6.2 cone of apex s(k) (only for k<=4) and base formed 
+_6.2 cone of apex s(k) (only for k<4) and base formed 
 by the d vertices k-1…k-1,k-d_
 
-sum x_i \geq d(k-2)
+sum x_i \geq dk-2d-1
  
 sum x_i \neq i0 \geq (2x<sub>i0</sub> - k)(d-1)
  for i0 =1….d 
@@ -108,7 +109,7 @@ by the d vertices k/2…k/2,k_
 
 sum x_i \leq  dk/2 
  
-sum x_i \neq i0 \leq 2d x<sub>i0</sub>   for i0 =1….d  
+sum x_i \neq i0 \leq d x<sub>i0</sub>   for i0 =1….d  
 a1 = -2d a2
 
 _8.1 cone of apex 0 and base formed by the d vertices k/2-1 … k/2-1 k-1_
@@ -118,7 +119,7 @@ sum x_i \leq  dk/2
 sum x_i \neq i0 \leq (dk-2d+2)/(k-2) x<sub>i0</sub>   for i0 =1….d  
 a1 = - (dk-2d+2)/(k-2) a2
 
-_8.2 cone of apex s(k) and base formed by the d vertices k/2-1 … k/2-1 k-1_
+_8.2 cone of apex s(k) (only for d<=4) and base formed by the d vertices k/2-1 … k/2-1 k-1_
 
 sum x_i \leq  dk/2 
  
@@ -128,10 +129,18 @@ a1 = - (-d+2 - 2/(k+2)) a2
 10 . if no in 9, check decomposation number, if > 1,move it to nonVerteices, 
 do 6
 
-**check decomposation**
+**check decomposation by eps**
 
 we decompose the starting vertex (maintain list of dcomposition/eps
 of starting vertex), than add edges(e_l， store the points with eps:
 5 choose 1 5 choose 2 5 choose 3 5 choose 4 5 choose 5),
 We store the index as key,eps value as value in a dict)
 and check the eps sum from d choose 2 to d choose d
+
+**check decomposation by heuristic**
+
+Check : 123 is not a vertex by decomposition heuristic 
+starting from left and smallest : 
+100 + 023 = 100 + 010 + 013 = 100 + 010 + 001 + 011 
+starting from left and largest:
+111 + 012 and 012 is a vertex so 111 + 010 + 011)
