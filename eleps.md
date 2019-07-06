@@ -8,10 +8,15 @@ Let eps_I be the epsilon in the subsum corresponding to e_I  (p =  sum_I eps_I e
 you can not have eps_{ij} =1 while eps_{i}=eps_{j}=0  (and neither eps_{ij} =0 while eps_{i}=eps_{j}=1
 Thus when go along the algorithm (that is change some eps_I from 0 to 1 as you add the generator e_I) you should check the following (d choose 2) quantities:
 
-for any 1\leq i < j \leq d,  check whether  2 eps_{ij}  + eps_{i} + eps_{j} = 2
+for any 1\leq i < j \leq d,  check whether  
+2 eps_{ij}  + eps_{i} + eps_{j} = 2
 if yes stop right away as this is not a vertex 
 
 (9, **5** choose 2 is not too much)
+
+_**The sum for replacement can have 2 dcomops?
+none of a subsum of point is dcompedable
+**_
 
 _we decompose the starting vertex (maintain list of dcomposition/eps
  of starting vertex?),
