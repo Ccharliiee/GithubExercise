@@ -6,7 +6,7 @@ from scipy.spatial import ConvexHull
 import queue
 
 def funcC():
-    dim = 4
+    dim = 2
     k = 2**(dim-1)
     gervec = list(itertools.product(range(2), repeat=dim))
     print('ger: ',gervec)
@@ -31,10 +31,12 @@ def funcC():
     # np.savetxt("all d" + str(dim) + ".csv", pts[hull.vertices], fmt='%s', delimiter=',', newline='\n')
     print('all vertices',pts[hull.vertices])
 
+
     perverticesset = set()
     dkverticesq = queue.PriorityQueue()
     pervertices = []
     for vertex in pts[hull.vertices]:
+        print('vertex； ', vertex)
         vertex = np.sort(vertex)
         if sum(vertex) > dim*k/2:
             continue
@@ -47,11 +49,12 @@ def funcC():
             continue
         perverticesset.add(vertexstr)
         pervertices.append(vertex)
-
-    dkvertices = dkverticesq.get()[1]
-    pervertices.append(dkvertices)
+        print('pervertices', pervertices)
+    if not dkverticesq.empty():
+        dkvertices = dkverticesq.get()[1]
+        pervertices.append(dkvertices)
     # pervertices = np.array(pervertices)
-    # np.savetxt("perv d" + str(dim) + ".csv",  pervertices, fmt='%s', delimiter=',', newline='\n')
+    np.savetxt("perv d" + str(dim) + ".csv",  pervertices, fmt='%s', delimiter=',', newline='\n')
     print('pervertice: ', pervertices)
 
 funcC()
