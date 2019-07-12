@@ -6,12 +6,12 @@ let k=2^{d-1} and s(d)=(k…..k)   d < sum x_i leq \leq dk/2
 
 lift their decomposition as well
 
-2 .  **Vcand** = Vred + 1111..d
+2 .  Vcand = Vred + 1111..d
 
-3 . Verteices = some points are known to be vertices for any d 
-0….0, 0…01, 1…1d, 0k/2…k/2, k/2-1 … k/2-1 k-1(d<=4), **_Vcand_**
+3 . **Verteices** = some points are known to be vertices for any d 
+0….0, 0…01, 1…1d, 0k/2…k/2, k/2-1 … k/2-1 k-1(d<=4), Vcand
 
-4 . nonVerteices = 11111x (x<d)is never a vertex 
+4 . **nonVerteices** = 11111x (x<d)is never a vertex 
 unless x=d (two decomposition are possible) 
 
 5 . initiate undetermined list **Vund**(Vcand - known determined points
@@ -22,15 +22,16 @@ known determined points = _(the origin , 0….01,  0k/2…k/2 )_
 until all points in Vund are determined(their neighborhood are verfied)
 
 find edges: from generator first remove their decomposition, 
-then reduce the remaining edges up to permutation of the current undetermined point 
-by getting the index fo permutation first 
+~~then reduce the remaining edges up to permutation of 
+the current undetermined point 
+by getting the index fo permutation first~~ 
 and choosing the smallest permutation available
 
 7 . check whether it's in Verteices, nonVerteices, red, if yes,do 6(continue). 
 
 8 . check sum x_i <= dk/2, if no, remove it. do 6
 
-9 . if no in 7, check cone membership, if yes,move it to nonVerteices, do 6
+9 . if no in 8, check cone membership, if yes,move it to nonVerteices, do 6
 
 
  _1.1cone of apex 0 and base formed the d vertices 11…11d_
@@ -138,6 +139,8 @@ We store the index as key,eps value as value in a dict)
 and check the eps sum from d choose 2 to d choose d
 
 **check decomposation by heuristic**
+
+try to decompose using big family vs small family
 
 Check : 123 is not a vertex by decomposition heuristic 
 starting from left and smallest : 
