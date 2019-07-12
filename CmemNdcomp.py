@@ -5,6 +5,14 @@ from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial import ConvexHull
 import queue
 
+
+class Point(object):
+
+    def __init__(self, vertex, dcomp) -> None:
+        super().__init__()
+        self.vertex = vertex
+        self.dcomp = dcomp
+
 def funcC():
     dim = 2
     k = 2**(dim-1)
@@ -16,6 +24,7 @@ def funcC():
         for lists in comb:
             # print('lists: ', lists)
             pt = np.array(lists).sum(axis=0, dtype=int)
+            ptob = Point(pt, lists)
             # print('pt: ', pt)
             pts.append(list(pt))
     # print('pts: ', pts)
