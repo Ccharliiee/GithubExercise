@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial import ConvexHull
 import queue
-
+import pickle
 
 class Point(object):
 
@@ -71,8 +71,7 @@ def funcC1():
     np.savetxt("perv d" + str(dim) + ".csv",  pervertices, fmt='%s', delimiter=',', newline='\n')
     print('pervertice: ', pervertices)
 
-def funcDcomp():
-    dim = 4
+def funcDcomp(dim):
     k = 2**(dim-1)
     gervec = list(itertools.product(range(2), repeat=dim))
     # print('ger: ',gervec)
@@ -89,7 +88,7 @@ def funcDcomp():
                 continue
             # pt = np.sort(pt)
             ptsstr = ' '.join(np.array2string(pt, separator=','))
-            ptob = Point(pt, lists)
+            ptob = Point(pt, np.array(lists))
             # print('pt: ', pt)
             if ptsstr in ptsob:
                 ptsob[ptsstr] = 2
@@ -125,17 +124,36 @@ def funcDcomp():
         print(dkvertices)
         pervertices[dkvertices[0]] = dkvertices[1]
     # pervertices['[ 0 , 0 ]'] = Point(np.zeros(dim, dtype=np.int), ((0,)*dim,))
-    pervertices[' '.join(np.array2string(np.zeros(dim, dtype=np.int), separator=','))] = Point(np.zeros(dim, dtype=np.int), ((0,)*dim,))
+    pervertices[' '.join(np.array2string(np.zeros(dim, dtype=np.int), separator=','))] = Point(np.zeros(dim, dtype=np.int), np.array(((0,)*dim,)))
     # pervertices = np.array(pervertices)
     # print('pervertice: ', pervertices)
+    # arr2save = np.array([[0, 0]], dtype=int)
     arr2save = []
     for key, val in pervertices.items():
-        print(key, val)
+        # print('kv: ', key, val)
         arr2save.append(val.vertex)
         arr2save.append(val.dcomp)
-        # print('arr2save； ', arr2save)
-    np.savetxt("perv_d_dcomp" + str(dim) + ".csv",  arr2save, fmt='%s', delimiter=',', newline='\n')
+        # print('arr2save', arr2save)
+    print('arr2save', arr2save)
+    # np.savetxt("perv_d_dcomp" + str(dim) + ".csv",  arr2save, fmt='%s', delimiter=',', newline='\n')
+    # np.save("perv_d_dcomp" + str(dim) + ".csv",  arr2save)
+    return arr2save
 
-funcDcomp()
+def picw(dim, arr2save):
+    with open("pickelfile/perv_d_dcomp" + str(dim) + ".pkl", 'wb') as fp:
+        pickle.dump(arr2save, fp)
+
+    with open('pickelfile/perv_d_dcomp' + str(dim) + '.pkl', 'rb') as fp:
+        itemlist =pickle.load(fp)
+    print('itemlist', itemlist)
+
+def picr(dim):
+    with open('pickelfile/perv_d_dcomp' + str(dim) + '.pkl', 'rb') as fp:
+        itemlist =pickle.load(fp)
+    print('gradpro.six003deluxe.picr    itemlist', itemlist)
+    return itemlist
+
+
+# funcDcomp(3)
 
 # funcC1()
