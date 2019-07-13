@@ -79,13 +79,17 @@ def funcDcomp(dim):
     print('ger: ', gervec)
     pts = []
     ptsob = {}
-    for r in range(1, len(gervec)):
+    for r in range(1, len(gervec)+1):
         comb = itertools.combinations(gervec, r)
         for lists in comb:
             # print('lists: ', lists)
             pt = np.array(lists).sum(axis=0, dtype=int)
-            if sum(pt) > dim * k / 2:
-                continue
+
+########################only keep vertex up to central symmetery
+            # if sum(pt) > dim * k / 2:
+            #     continue
+########################only keep vertex up to central symmetery
+
             # pt = np.sort(pt)
             ptsstr = ' '.join(np.array2string(pt, separator=','))
             ptob = Point(pt, np.array(lists))
@@ -112,10 +116,14 @@ def funcDcomp(dim):
         vertexstr = ' '.join(np.array2string(vertex, separator=','))
         if vertexstr in perverticesset:
             continue
-        if sum(vertex) == dim*k/2:
-            perverticesset.add(vertexstr)
-            dkverticesq.put(((vertex > k/2).sum(), key, val))
-            continue
+
+################## sum x_i = dk/2 minimize the number of coordinates larger than k/2
+        # if sum(vertex) == dim*k/2:
+        #     perverticesset.add(vertexstr)
+        #     dkverticesq.put(((vertex > k/2).sum(), key, val))
+        #     continue
+################# sum x_i = dk/2 minimize the number of coordinates larger than k/2
+
         perverticesset.add(vertexstr)
         pervertices[key] = val
         # print('pervertices', pervertices)
@@ -127,6 +135,8 @@ def funcDcomp(dim):
     pervertices[' '.join(np.array2string(np.zeros(dim, dtype=np.int), separator=','))] = Point(np.zeros(dim, dtype=np.int), np.array(((0,)*dim,)))
     # pervertices = np.array(pervertices)
     # print('pervertice: ', pervertices)
+
+
     # arr2save = np.array([[0, 0]], dtype=int)
     arr2save = []
     for key, val in pervertices.items():
@@ -139,21 +149,21 @@ def funcDcomp(dim):
     # np.save("perv_d_dcomp" + str(dim) + ".csv",  arr2save)
     return arr2save
 
-def picw(dim, arr2save):
-    with open("pickelfile/perv_d_dcomp" + str(dim) + ".pkl", 'wb') as fp:
+def picw(dim, arr2save, filenameprefix='perv_d_dcomp'):
+    with open("pickelfile/"+ filenameprefix + str(dim) + ".pkl", 'wb') as fp:
         pickle.dump(arr2save, fp)
 
-    with open('pickelfile/perv_d_dcomp' + str(dim) + '.pkl', 'rb') as fp:
+    with open("pickelfile/"+ filenameprefix + str(dim) + ".pkl", 'rb') as fp:
         itemlist =pickle.load(fp)
-    print('itemlist', itemlist)
+    print('gradpro.six003deluxe.picw    itemlist', itemlist)
 
-def picr(dim):
-    with open('pickelfile/perv_d_dcomp' + str(dim) + '.pkl', 'rb') as fp:
+def picr(dim, filenameprefix='perv_d_dcomp'):
+    with open("pickelfile/"+ filenameprefix + str(dim) + ".pkl", 'rb') as fp:
         itemlist =pickle.load(fp)
     print('gradpro.six003deluxe.picr    itemlist', itemlist)
     return itemlist
 
 
-# funcDcomp(3)
-
+# funcDcomp(2)
+# picw(2, funcDcomp(2), 'perv_dcomp_nct')
 # funcC1()

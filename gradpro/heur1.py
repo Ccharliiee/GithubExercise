@@ -1,10 +1,10 @@
 import numpy as np
 import gradpro.six003deluxe as sd
 
-startv = sd.picr(2)
-print('sv:', startv)
+vred= sd.picr(2, 'perv_dcomp_nct')
+print('sv:', vred)
 
-for i,item in enumerate(startv):
-    startv[i] = np.insert(item, 0, 0, axis=i%2)
+for i,item in enumerate(vred):
+    vred[i] = np.insert(item, 0, 0, axis=i%2)
 
-print('svl:', startv)
+print('svl:',vred)
