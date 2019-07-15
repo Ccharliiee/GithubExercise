@@ -9,7 +9,7 @@ lift their decomposition as well
 2 .  Vcand = Vred + 1111..d
 
 3 . **Verteices** = some points are known to be vertices for any d 
-0….0, 0…01, 1…1d, 0k/2…k/2, k/2-1 … k/2-1 k-1(d<=4), Vcand
+0….0, 0…01, 1…1d, 0k/2…k/2, k/2-1 … k/2-1 k-1(d<=4), =**Vcand**
 
 4 . **nonVerteices** = 11111x (x<d)is never a vertex 
 unless x=d (two decomposition are possible) 
