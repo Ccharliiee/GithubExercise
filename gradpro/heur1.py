@@ -29,3 +29,14 @@ for i in range(dim):
     nonvertices.append([1]*(dim-1)+[i])
 print('nonvertices:',nonvertices, 'len', len(nonvertices))
 
+determinedpoints = np.array([[0]*dim, [0,0,1], [0,2,2]])
+vcanddict = {}
+for i in range(0, len(vcand),2):
+    vcandval = []
+    vcandval.append(vcand[i])
+    vcandval.append(vcand[i+1])
+    vcanddict[' '.join(np.array2string(vcand[i], separator=','))] = vcandval
+print('vcandval: ', vcanddict)
+for deterp in determinedpoints:
+    vcanddict.pop(' '.join(np.array2string(deterp, separator=',')))
+print('Uvcandval: ', vcanddict)
