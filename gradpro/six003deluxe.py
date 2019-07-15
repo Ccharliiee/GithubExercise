@@ -160,7 +160,7 @@ def picw(dim, arr2save, filenameprefix='perv_d_dcomp'):
 def picr(dim, filenameprefix='perv_d_dcomp'):
     with open("pickelfile/"+ filenameprefix + str(dim) + ".pkl", 'rb') as fp:
         itemlist =pickle.load(fp)
-    print('gradpro.six003deluxe.picr    itemlist', itemlist)
+    # print('gradpro.six003deluxe.picr    itemlist', itemlist)
     return itemlist
 
 

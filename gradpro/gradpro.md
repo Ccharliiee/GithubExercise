@@ -1,3 +1,6 @@
+#### ask how to check permut
+
+
 let k=2^{d-1} and s(d)=(k…..k)   d < sum x_i leq \leq dk/2 
 
 

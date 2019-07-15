@@ -1,0 +1,3 @@
+
+def conememberships(point):
+    conecoef = []
