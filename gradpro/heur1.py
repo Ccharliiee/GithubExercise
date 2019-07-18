@@ -4,24 +4,24 @@ import gradpro.six003deluxe as sd
 
 #############ask how to check permut
 
-dim = 3
+
+
 
 ################### init vcand ver nonver
-def initial(dim):
-    k = 2**(dim-1)
-    vred= sd.picr(2, 'perv_dcomp_nct')
+def initial():
+    k = 2 ** (dim - 1)
+    vred = sd.picr(2, 'perv_dcomp_nct')
     print('smallver:', vred)
 
-    for i,item in enumerate(vred):
-        vred[i] = np.insert(item, 0, 0, axis=i%2)
+    for i, item in enumerate(vred):
+        vred[i] = np.insert(item, 0, 0, axis=i % 2)
 
     # print('smallverlift:',vred, 'len', len(vred))
 
-
     # vcand = np.append(vred, np.array([1,1,3])) 0….0, 0…01, 1…1d, 0k/2…k/2, k/2-1 … k/2-1 k-1
     vcand = list(vred)
-    vcand.append(np.array([1,1,3]))
-    vcand.append(np.array([[0,0,1], [0,1,1], [1,0,1]]))
+    vcand.append(np.array([1, 1, 3]))
+    vcand.append(np.array([[0, 0, 1], [0, 1, 1], [1, 0, 1]]))
     # print('vcandbasic:', vcand, 'len', len(vcand))
 
     # vertices = np.array(vcand)
@@ -30,15 +30,15 @@ def initial(dim):
 
     nonvertices = []
     for i in range(dim):
-        nonvertices.append([1]*(dim-1)+[i])
+        nonvertices.append([1] * (dim - 1) + [i])
     # print('nonvertices:',nonvertices, 'len', len(nonvertices))
 
-    determinedpoints = np.array([[0]*dim, [0,0,1], [0,2,2]])
+    determinedpoints = np.array([[0] * dim, [0, 0, 1], [0, 2, 2]])
     vcanddict = {}
-    for i in range(0, len(vcand),2):
+    for i in range(0, len(vcand), 2):
         vcandval = []
         vcandval.append(vcand[i])
-        vcandval.append(vcand[i+1])
+        vcandval.append(vcand[i + 1])
         vcanddict[' '.join(np.array2string(vcand[i], separator=','))] = vcandval
     # print('vcandval: ', vcanddict)
     for deterp in determinedpoints:
@@ -47,13 +47,26 @@ def initial(dim):
 
     return vcanddict, vertices, nonvertices
 
+
 ########################################
-
-
-vcanddict, vertices, nonvertices = initial(dim)
+dim = 3
+k = 2 ** (dim - 1)
+vcanddict, vertices, nonvertices = initial()
 print('vcanddict: ', vcanddict)
-print('vertices:',vertices, 'len', len(vertices))
-print('nonvertices:',nonvertices, 'len', len(nonvertices))
+print('vertices:', vertices, 'len', len(vertices))
+print('nonvertices:', nonvertices, 'len', len(nonvertices))
+
+#################################################hash vertex non vertex
+verticesdict={}
+nonverticesdict={}
+for ver in vertices:
+    verticesdict[' '.join(np.array2string(np.array(ver), separator=','))] = ver
+for nonver in nonverticesdict:
+    nonverticesdict[' '.join(np.array2string(np.array(nonver), separator=','))] = nonver
+
+print('verticesdict:', verticesdict, 'len', len(verticesdict))
+print('nonvertices:', nonverticesdict, 'len', len(nonverticesdict))
+###################################################
 edges = list(itertools.product(range(2), repeat=dim))
 edgesdict = {}
 for edge in np.array(edges[1:]):
@@ -67,8 +80,15 @@ for key, val in vcanddict.items():
         if gerstr in edgesdict.keys():
             edgeavail.pop(gerstr)
     print('point', val)
-    print('edgeva:', edgeavail.values())
+    print('edgeavailable:', edgeavail.values())
 
     for forward in edgeavail.values():
         newpoint = np.add(val[0], forward)
-        print('newp ', newpoint)
+        if ' '.join(np.array2string(np.array(newpoint), separator=',')) in verticesdict :
+            continue
+        elif ' '.join(np.array2string(np.array(newpoint), separator=',')) in nonverticesdict:
+            continue
+
+        elif sum(newpoint) > dim*k/2:
+            continue
+        print('newpoint ', newpoint)
