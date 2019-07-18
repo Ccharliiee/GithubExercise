@@ -105,6 +105,8 @@ by the d vertices k-1…k-1,k-d_
 sum x_i \geq dk-2d-1
  
 sum x_i \neq i0 \geq (2x<sub>i0</sub> - k)(d-1)
+
+2(d-1)x<sub>i0</sub> -k(d-1)
  for i0 =1….d 
 a1 = -(k-3)(d-1)/(k-2) a2  -2(d-1)     -k(d-1)
 
