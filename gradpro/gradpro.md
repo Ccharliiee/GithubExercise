@@ -77,7 +77,7 @@ sum x_i \neq i0 \leq (d-1-1/k)x<sub>i0</sub> + 1   for i0 =1….d  a1=-da2
  sum x_i \neq i0 \geq (1/(k/2 +1) + d-2)x<sub>i0</sub>    for i0 =1….d  
  a1=-(1/(k/2 +1) + d-2)a2
 
- _4.2 cone of apex (k,k,k,....)(only for d > 4) no need for (k,k,k,....) and base formed 
+ _4.2 cone of apex (k,k,k,....)(only for d > 4) and base formed 
  by the d vertices 1,k/2+1…k/2+1_
 
 sum x_i \geq (d-1)k/2 +d  (k/2 +1)(d-1) +1
