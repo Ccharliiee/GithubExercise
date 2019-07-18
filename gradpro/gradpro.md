@@ -39,22 +39,23 @@ and choosing the smallest permutation available
 
  _1.1cone of apex 0 and base formed the d vertices 11…11d_
  
+ sum x_i \leq 2d-1
+ 
  sum x_i \neq i0 \leq 2(d-1)x_i0   for i0 =1….d (a1=(2d-2)a2)
  
- sum x_i \leq 2d-1
  
 _1.2 cone of apex (k,k,k,....) and base formed the d vertices 11…11d_
 
  sum x_i \geq 2d-1
 
  sum x_i \neq i0 \leq ((k-2)(d-1)(x_i0-1))/k-1 +2(d-1)   for i0 =1….d  
- 
+ (k-2)(d-1)/(k-1) x_i0 + k(d-1)/(k-1)
  
  _2.1cone of apex 0 and base formed by the d vertices 0k/2….k/2_
 
-sum x_i \neq i0 \geq (d-2) x_i0   for i0 =1….d  a1=(d-2)a2  
-
 sum x_i \leq (d-1)k/2
+
+sum x_i \neq i0 \geq (d-2) x_i0   for i0 =1….d  a1=(d-2)a2  
 
  _2.2 cone of apex (k,k,k,....) and base formed by the d vertices 0k/2….k/2_
 
