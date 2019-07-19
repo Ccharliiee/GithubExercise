@@ -59,3 +59,7 @@ def conememberships(point):
 # print(conemembershipstemplate([2, 1.5, 2],(dim-1 -(1/k)), '', 0, dim*k -1, False))
 
 # print(conemembershipstemplate([4, 4, 4],(k-2)*(dim-1)/(k-1), 2*(dim-1), -k*(dim-1), dim*k-2*dim-1, False))
+
+# print(conemembershipstemplate([1, 1, 2], dim, '', 0, dim*k/2 + k/2))
+
+print(conemembershipstemplate([2.5, 2.5, 3.5], (dim*k-2*dim+2)/(k-2) , (dim-2) + 2/(k+2),  k*(1 - 2/(k+2)), dim*k/2 + k/2 -dim))
