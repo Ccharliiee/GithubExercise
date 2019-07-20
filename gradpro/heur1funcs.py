@@ -1,22 +1,23 @@
-from gradpro.heur1 import dim, k
+# from gradpro.heur1 import dim, k
 import numpy as np
 
-
+dim =4
+k = 2 ** (dim - 1)
 def conemembershipstemplate(point, coef1='', coef2='', const=0, coordsumthresh=dim * k / 2,
                             leqflag=True):  # if leq is in ineqs, leqflag=T
     coordsum = sum(point)
-    if coordsum < coordsumthresh and coef1 != '':  # if '', not in this case
+    if coordsum <= coordsumthresh and coef1 != '':  # if '', not in this case
         for i0 in point: #check apex 0
             if coordsum - i0 > coef1 * i0 and leqflag or coordsum - i0 < coef1 * i0 and not leqflag:  # handle leq or geq
                 # print('000 sk')
                 return False
-    elif coordsum > coordsumthresh and coef2 != '':
+    elif coordsum >= coordsumthresh and coef2 != '':
         for i0 in point: #check apex s(k)
             if coordsum - i0 > coef2 * i0 + const and leqflag or coordsum - i0 < coef2 * i0 + const and not leqflag:  # handle leq or geq
                 return False
-    else:
-        # print(insider)
-        return True
+    # else:
+    #     # print(insider)
+    #     return True
     return True
 
 def conememberships(point):
@@ -65,7 +66,7 @@ def conememberships(point):
 
 
 #####################test2
-point = [1, 2, 3]
+point = [ 2 , 2 , 3 , 6 ]
 #
 # print(conemembershipstemplate(point, 2 * dim - 2, (k - 2) * (dim - 1) / (k - 1), k * (dim - 1) / (k - 1), 2 * dim - 1))
 #
@@ -84,7 +85,7 @@ point = [1, 2, 3]
 # print(conemembershipstemplate(point, (dim*k-2*dim+2)/(k-2) , (dim-2) + 2/(k+2),  k*(1 - 2/(k+2)), dim*k/2 + k/2 -dim))
 ##################################test2/
 
-def runconemembstempl(point):
+def conemembasmb(point):
     # if conemembershipstemplate(point, 2 * dim - 2, (k - 2) * (dim - 1) / (k - 1), k * (dim - 1) / (k - 1), 2 * dim - 1) or
     # conemembershipstemplate(point, dim - 2, dim, -k, (dim - 1) * k / 2, False) or conemembershipstemplate(point, '', dim-1-(1/k), 1, 1) or
     #     conemembershipstemplate(point, (1 / (k / 2 + 1)) + dim - 2, dim + (2 / (k - 2)), (-(2 * k) / (k - 2)) - k,
@@ -102,9 +103,23 @@ def runconemembstempl(point):
                 conemembershipstemplate(point, dim, '', 0, dim * k / 2 + k / 2),
                 conemembershipstemplate(point, (dim * k - 2 * dim + 2) / (k - 2), (dim - 2) + 2 / (k + 2), k * (1 - 2 / (k + 2)), dim * k / 2 + k / 2 - dim)
                 ]
-    for conememb in conemembs:
-        if conememb:
+    # for conememb in conemembs:
+    #     if conememb:
+    #         return True
+    # return False
+    conemembargs = [[2 * dim - 2, (k - 2) * (dim - 1) / (k - 1), k * (dim - 1) / (k - 1), 2 * dim - 1, True],
+                    [dim - 2, dim, -k, (dim - 1) * k / 2, False],
+                    ['', dim-1-(1/k), 1, 1, True],
+                    [(1 / (k / 2 + 1)) + dim - 2, dim + (2 / (k - 2)),(-(2 * k) / (k - 2)) - k, (k / 2 + 1) * (dim - 1) + 1, False],
+                    [(dim - 1 - (1 / k)), '', 0, dim * k - 1, False],
+                    [(k - 2) * (dim - 1) / (k - 1), 2 * (dim - 1), -k * (dim - 1), dim * k - 2 * dim - 1, False],
+                    [dim, '', 0, dim * k / 2 + k / 2, True],
+                    [(dim * k - 2 * dim + 2) / (k - 2), (dim - 2) + 2 / (k + 2), k * (1 - 2 / (k + 2)), dim * k / 2 + k / 2 - dim, True]
+
+    ]
+    for i, carg in enumerate(conemembargs):
+        if conemembershipstemplate(point, carg[0], carg[1], carg[2], carg[3], carg[4]):
+            print(i, 'index: ',carg)
             return True
     return False
-
-print(runconemembstempl(point))
+print(conemembasmb(point))
