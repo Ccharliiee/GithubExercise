@@ -162,6 +162,31 @@ of starting vertex), than add edges(e_l， store the points with eps:
 We store the index as key,eps value as value in a dict：'012': 1
 and check the eps sum from d choose 2 to d choose d
 
+###### _**Two design pattern: from generators vs check all combination**_
+
+**from generators** (**_hard_**)
+need to get the number of ones first
+if the number of ones > 1:
+check all combination of the ones(**_hard_**)
+
+**_check all combination_**
+if 11 1 1 meet
+no need for 111 1 1 1
+
+**4 cases：**
+eps{ijk...}=1 eps{subset of{...}}=1 
+eps{ijk...}=1 eps{subset of{...}}=1 eps{ijk}=1
+eps{ijk...}=0 eps{subset of{...}}=1
+eps{ijk...}=0 eps{subset of{...}}=1 eps{ijk}=1
+
+a loop from d choose to to d choose d
+start with d choose 2
+use itertools.combinations(iterable, r) to get 2 indices
+
+
+
+
+
 **check decomposation by heuristic**
 
 try to decompose using big family vs small family

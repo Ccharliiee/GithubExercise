@@ -14,10 +14,10 @@ class Point(object):
         self.dcomp = dcomp
 
     def __str__(self) -> str:
-        return str(self.vertex) + ' ' + str(self.dcomp)
+        return str(self.vertex) + ', ' + str(self.dcomp)
 
     def __repr__(self) -> str:
-        return str(self.vertex) + ' ' + str(self.dcomp)
+        return str(self.vertex) + ', ' + str(self.dcomp)
 
 def funcC1():
     dim = 2
