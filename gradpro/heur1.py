@@ -6,7 +6,7 @@ import gradpro.heur1funcs as h1func
 
 
 
-dim = 5
+dim = 3
 k = 2 ** (dim - 1)
 
 ################### init vcand ver nonver
@@ -27,21 +27,21 @@ def initial():
 
     # vcand = np.append(vred, np.array([1,1,3]))#0….0, 0…01, 1…1d, 0k/2…k/2, k/2-1 … k/2-1 k-1
     ###############3
-    # vcand.append(np.array([1, 1, 3]))
-    # vcand.append(np.array([[0, 0, 1], [0, 1, 1], [1, 0, 1]]))       # 1111d's generator
+    vcand.append(np.array([1, 1, 3]))
+    vcand.append(np.array([[0, 0, 1], [0, 1, 1], [1, 0, 1]]))       # 1111d's generator
     ###############4
     # vcand.append(np.array([1, 1, 1, 4]))
     # vcand.append(np.array([[0, 0, 0, 1], [0, 0, 1, 1], [0, 1, 0, 1], [1, 0, 0, 1]]))       # 1111d's generator
     # vcand.append(np.array([3, 3, 3, 7]))
     # vcand.append(np.array([[0, 0, 0, 1], [0, 0, 1, 1], [0, 1, 0, 1], [1, 0, 0, 1], [0, 1, 1, 1], [1, 0, 1, 1], [1, 1, 0, 1]]))  # k/2-1 … k/2-1 k-1's generator
     ###############5
-    vcand.append(np.array([1, 1, 1, 1, 5]))
-    vcand.append(np.array([[0, 0, 0, 0, 1], [0, 0, 0, 1, 1], [0, 0, 1, 0, 1], [0, 1, 0, 0, 1], [1, 0, 0, 0, 1]]))  # 1111d's generator
-    vcand.append(np.array([1, 9, 9, 9, 9]))
-    twokplus1 = [[1]*dim]
-    for gen in itertools.product(range(2), repeat=dim-1):
-        twokplus1.append(np.insert(gen, 0, 0))
-    vcand.append(np.array(twokplus1)) # k/2-1 … k/2-1 k-1's generator
+    # vcand.append(np.array([1, 1, 1, 1, 5]))
+    # vcand.append(np.array([[0, 0, 0, 0, 1], [0, 0, 0, 1, 1], [0, 0, 1, 0, 1], [0, 1, 0, 0, 1], [1, 0, 0, 0, 1]]))  # 1111d's generator
+    # vcand.append(np.array([1, 9, 9, 9, 9]))
+    # twokplus1 = [[1]*dim]
+    # for gen in itertools.product(range(2), repeat=dim-1):
+    #     twokplus1.append(np.insert(gen, 0, 0))
+    # vcand.append(np.array(twokplus1)) # k/2-1 … k/2-1 k-1's generator
 
     # print('vcandbasic:', vcand, 'len', len(vcand))
 
@@ -87,7 +87,7 @@ def runheu1():
 
     for ver in vertices:
         verticesdict[''.join(np.array2string(np.array(ver), separator=','))] = ver
-    for nonver in nonverticesdict:
+    for nonver in nonvertices:
         nonverticesdict[''.join(np.array2string(np.array(nonver), separator=','))] = nonver
 
     print('verticesdict:', verticesdict, 'len', len(verticesdict))
@@ -158,27 +158,30 @@ def verificationbk():
         if v not in runheu1()[0].keys():
             fg=False
             print('missed: ', v)
+    for v in runheu1()[0].keys():
+        if v not in vv:
+            print('wrong: ', v)
     print('FINALLLY: ', fg)
-
+# verificationbk()
 
 def verificationall():
-    # vground = sd.picr(dim, 'perv_dcomp')
-    # print('verificationall', len(vground[::2]), vground[::2])
-    # resrunhau1 = runheu1()
-    # resultvcand = {**resrunhau1[0], **resrunhau1[1]}
-    # print(len(resultvcand), len(vground[::2]))
-    # # print(resultvcand)
-    # # print(vground)
-    # for ver in vground[::2]:
-    #     if ''.join(np.array2string(np.array(ver), separator=',')) not in resultvcand:
-    #         print(False, ver)
-
-    ####################d=5 only
-    vground = sd.picr(dim, 'perv')
-    print('verificationall', len(vground), vground)
-    resultvcand = {**runheu1()[0], **runheu1()[1]}
-    print(len(resultvcand), len(vground))
-    for ver in vground:
+    vground = sd.picr(dim, 'perv_dcomp')
+    print('verificationall', len(vground[::2]), vground[::2])
+    resrunhau1 = runheu1()
+    resultvcand = {**resrunhau1[0], **resrunhau1[1]}
+    print(len(resultvcand), len(vground[::2]))
+    # print(resultvcand)
+    # print(vground)
+    for ver in vground[::2]:
         if ''.join(np.array2string(np.array(ver), separator=',')) not in resultvcand:
             print(False, ver)
+
+    ####################d=5 only
+    # vground = sd.picr(dim, 'perv')
+    # print('verificationall', len(vground), vground)
+    # resultvcand = {**runheu1()[0], **runheu1()[1]}
+    # print(len(resultvcand), len(vground))
+    # for ver in vground:
+    #     if ''.join(np.array2string(np.array(ver), separator=',')) not in resultvcand:
+    #         print(False, ver)
 verificationall()

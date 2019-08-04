@@ -1,10 +1,10 @@
 # from gradpro.heur1 import dim, k
 import numpy as np
 import itertools
-import  collections
+import collections
 import gradpro.six003deluxe as sd
 
-dim = 5
+dim = 3
 k = 2 ** (dim - 1)
 
 
@@ -46,23 +46,25 @@ def epscheck(point:sd.Point):
 
     allepsdict = elcreate()
     for k,v in allepsdict.items(): #k meams d choose k
-        print(k, v)
+        # print(k, v)
         if k==2:
             for vector in v: #2 [['[1,1,0]', '[1,0,0]', '[0,1,0]'], ['[1,0,1]', '[1,0,0]', '[0,0,1]'], ['[0,1,1]', '[0,1,0]', '[0,0,1]']]
                 # print('vector: ', vector)
                 if k*generatordict[vector[0]] + generatordict[vector[1]] + generatordict[vector[2]] == 2:
                     return False
         else:
-            for i in range(1, len(v[0]),2): #3 [['[1,1,1]', '[0,0,1]', '[1,1,0]', '[0,1,0]', '[1,0,1]', '[1,0,0]', '[0,1,1]']]
-                # print('i', i)
-                # print('vector: ', v[0][i], v[0][i+1])
-                if k*generatordict[v[0][0]] + generatordict[v[0][i]] + generatordict[v[0][i+1]] == k:
-                    return False
+            for vec in v:
+                for i in range(1, len(vec),2): #3 [['[1,1,1]', '[0,0,1]', '[1,1,0]', '[0,1,0]', '[1,0,1]', '[1,0,0]', '[0,1,1]']]
+                    # print('i', i)
+                    print('vector: ', vec[0], vec[i], vec[i+1])
+                    if k*generatordict[vec[0]] + generatordict[vec[i]] + (k-1)*generatordict[vec[i+1]] == k:
+                        return False
     return True
 # point1=sd.Point([1,1,0], [[0,1,0], [1,0,0]])
 # point2=sd.Point([1, 1, 1, 4], [[0, 0, 0, 1], [0, 0, 1, 1], [0, 1, 0, 1], [1, 0, 0, 1]])
-# point3=sd.Point([1, 1, 1, 4], [[0, 0, 0, 1], [0, 0, 1, 1], [0, 1, 0, 1], [1, 0, 0, 1]])
-# print(epscheck(point1))
+point3=sd.Point([1, 1, 3, 4], [[0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1], [0, 1, 1, 1], [1, 0, 0, 1]])
+point4=sd.Point([2, 2, 5, 5], [[0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1], [0, 1, 1, 1], [1, 0, 1, 1], [1, 0, 1, 1]])
+print(epscheck(point4))
 
 def conemembershipstemplate(point, coef1='', coef2='', const=0, coordsumthresh=dim * k / 2,
                             leqflag=True):  # if leq is in ineqs, leqflag=T

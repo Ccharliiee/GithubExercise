@@ -82,12 +82,12 @@ def funcDcomp(dim):
     ptsobnct = {}
     ptsob = {}
     for r in range(1, len(gervec)+1):
+        print('rth:', r)
         comb = itertools.combinations(gervec, r)
         for lists in comb:
             # print('lists: ', lists)
             pt = np.array(lists).sum(axis=0, dtype=int)
-            ptsstr = ' '.join(np.array2string(pt, separator=','))
-            ptob = Point(pt, np.array(lists))
+            ptsstr = ''.join(np.array2string(pt, separator=','))
 
 #######################only keep vertex up to central symmetery
             if sum(pt) > dim * k / 2:
@@ -95,6 +95,7 @@ def funcDcomp(dim):
                 if ptsstr in ptsobnct:
                     ptsobnct[ptsstr] = 2
                 else:
+                    ptob = Point(pt, np.array(lists))
                     ptsobnct[ptsstr] = ptob
 
 #######################only keep vertex up to central symmetery
@@ -105,6 +106,7 @@ def funcDcomp(dim):
                     ptsob[ptsstr] = 2
                     ptsobnct[ptsstr] = 2
                 else:
+                    ptob = Point(pt, np.array(lists))
                     ptsob[ptsstr] = ptob
                     ptsobnct[ptsstr] = ptob
 
@@ -112,7 +114,8 @@ def funcDcomp(dim):
 
     ptsob = {key: val for key, val in ptsob.items() if val != 2}
     ptsobnct = {key: val for key, val in ptsobnct.items() if val != 2}
-    print('all vertices', ptsob)
+    # print('all vertices', ptsob)
+
     # np.savetxt("all d" + str(dim) + ".csv", pts[hull.vertices], fmt='%s', delimiter=',', newline='\n')
 
     def reduceruptoperm(ptsob, uptocentral=True):
@@ -124,7 +127,7 @@ def funcDcomp(dim):
             vertex = val.vertex
             # print('vertex； ', vertex)
             vertex = np.sort(vertex)
-            vertexstr = ' '.join(np.array2string(vertex, separator=','))
+            vertexstr = ''.join(np.array2string(vertex, separator=','))
             if vertexstr in perverticesset: ########because the smallest permutation is visited first
                 continue
 
@@ -156,7 +159,8 @@ def funcDcomp(dim):
         arr2save.append(val.vertex)
         arr2save.append(val.dcomp)
         # print('arr2save', arr2save)
-    print('arr2save', len(arr2save), arr2save)
+    # print('arr2save', len(arr2save), arr2save)
+
     # np.savetxt("perv_d_dcomp" + str(dim) + ".csv",  arr2save, fmt='%s', delimiter=',', newline='\n')
     # np.save("perv_d_dcomp" + str(dim) + ".csv",  arr2save)
 
@@ -167,8 +171,9 @@ def funcDcomp(dim):
         arr2saveall.append(val.vertex)
         arr2saveall.append(val.dcomp)
         # print('arr2save', arr2save)
-    print('arr2saveall', len(arr2saveall), arr2saveall)
+    # print('arr2saveall', len(arr2saveall), arr2saveall)
     return arr2save, arr2saveall
+
 
 def picw(dim, arr2save, filenameprefix='perv_d_dcomp'):
     with open("pickelfile/"+ filenameprefix + str(dim) + ".pkl", 'wb') as fp:
@@ -184,9 +189,76 @@ def picr(dim, filenameprefix='perv_d_dcomp'):
     # print('gradpro.six003deluxe.picr    itemlist', itemlist)
     return itemlist
 
+def funcDcomp5plus(dim):
+    k = 2**(dim-1)
+    gervec = list(itertools.product(range(2), repeat=dim))
+    # print('ger: ',gervec)
+    gervec.remove((0,)*dim)
+    print('ger: ', gervec)
+    ptsobnct = {}
+    for r in range(1, len(gervec)+1):
+        print('rth:', r)
+        comb = itertools.combinations(gervec, r)
+        for lists in comb:
+            # print('lists: ', lists)
+            pt = np.array(lists).sum(axis=0, dtype=int)
+            ptsstr = ''.join(np.array2string(pt, separator=','))
+            if ptsstr in ptsobnct:
+                ptsobnct[ptsstr] = 2
+            else:
+                ptob = Point(pt, np.array(lists))
+                ptsobnct[ptsstr] = ptob
 
+    ptsobnct = {key: val for key, val in ptsobnct.items() if val != 2}
+    # print('all vertices', ptsob)
+
+    # np.savetxt("all d" + str(dim) + ".csv", pts[hull.vertices], fmt='%s', delimiter=',', newline='\n')
+
+    def reduceruptoperm(ptsob, uptocentral=True):
+    #################reduce up to permutation
+        perverticesset = set()
+        dkverticesq = queue.PriorityQueue()
+        pervertices = {}
+        for key, val in ptsob.items():
+            vertex = val.vertex
+            # print('vertex； ', vertex)
+            vertex = np.sort(vertex)
+            vertexstr = ''.join(np.array2string(vertex, separator=','))
+            if vertexstr in perverticesset: ########because the smallest permutation is visited first
+                continue
+
+    ################# sum x_i = dk/2 minimize the number of coordinates larger than k/2
+            if sum(vertex) == dim*k/2 and uptocentral:
+                perverticesset.add(vertexstr)
+                dkverticesq.put(((vertex > k/2).sum(), key, val))
+                continue
+    ################ sum x_i = dk/2 minimize the number of coordinates larger than k/2
+
+            perverticesset.add(vertexstr)
+            pervertices[key] = val
+            # print('pervertices', pervertices)
+        if not dkverticesq.empty():
+            dkvertices = dkverticesq.get()[1:]
+            print(dkvertices)
+            pervertices[dkvertices[0]] = dkvertices[1]
+        # pervertices['[ 0 , 0 ]'] = Point(np.zeros(dim, dtype=np.int), ((0,)*dim,))
+        pervertices[' '.join(np.array2string(np.zeros(dim, dtype=np.int), separator=','))] = Point(np.zeros(dim, dtype=np.int), np.array(((0,)*dim,)))
+        # pervertices = np.array(pervertices)
+        # print('pervertice: ', pervertices)
+        return pervertices
+
+    ################################save all vertices
+    arr2saveall = []
+    for key, val in reduceruptoperm(ptsobnct, False).items():
+        # print('kv: ', key, val)
+        arr2saveall.append(val.vertex)
+        arr2saveall.append(val.dcomp)
+        # print('arr2save', arr2save)
+    # print('arr2saveall', len(arr2saveall), arr2saveall)
+    return arr2saveall
 # funcDcomp(3)
-# picw(4, funcDcomp(4), 'perv_dcomp_nct')
+# fivedfuncD = funcDcomp(5)
+# picw(5, fivedfuncD[1], 'testperv_dcomp_nct')
 # picw(4, funcDcomp(4, True), 'perv_dcomp')
 # funcC1()
 
