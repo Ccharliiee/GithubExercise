@@ -17,7 +17,7 @@ def elcreate():
             el = np.zeros(dim, dtype=int)
             np.put(el, comb, 1)
             # print(el)
-            inequality = [''.join(np.array2string(el, separator=','))] # destinatiion 1vector
+            inequality = [np.array2string(el, separator=',')] # destinatiion 1vector
             for i in itertools.combinations(comb, cnum - 1):
                 # print('i: ', i)
                 eli = np.zeros(dim, dtype=int)
@@ -25,26 +25,53 @@ def elcreate():
                     elri = np.zeros(dim, dtype=int)
                     oneindex = list(x for x in comb if x not in i)
                     np.put(elri, oneindex, 1)
-                    inequality.append(''.join(np.array2string(elri, separator=',')))
+                    inequality.append(np.array2string(elri, separator=','))
                 np.put(eli, i, 1)
-                inequality.append(''.join(np.array2string(eli, separator=',')))
+                inequality.append(np.array2string(eli, separator=','))
             # print('inequality： ', inequality)
             inequalites[cnum].append(inequality)
     # print('inequalites: ', inequalites)
     return inequalites
 
+def elcreate11():
+    inequalites = collections.defaultdict(list)
+    for cnum in range(2, dim + 1):  # a loop from d choose 2 to to d choose d
+        # print('cnum: ', cnum)
+        for comb in itertools.combinations(range(dim), cnum):  # indices comb in d choose n
+            # print('comb:', comb)
+            el = np.zeros(dim, dtype=int)
+            np.put(el, comb, 1)        #largest vector in this iteration
+            # print(el)
+            inequality = [np.array2string(el, separator=',')] # destinatiion 1vector
+            for i in range((cnum+1)//2, cnum):
+                # print('i: ', i)
+                for j in itertools.combinations(comb, i):
+                    # print('j: ', j)
+                    eli = np.zeros(dim, dtype=int)
+                    if cnum > 2:  # cnum > 2, i is all its decomposition
+                        elri = np.zeros(dim, dtype=int)
+                        oneindex = list(x for x in comb if x not in j)
+                        np.put(elri, oneindex, 1)
+                        inequality.append(np.array2string(elri, separator=','))
+                    np.put(eli, j, 1)
+                    inequality.append(np.array2string(eli, separator=','))
+                # print('inequality： ', inequality)
+                inequalites[cnum].append(inequality)
+    # print('inequalites: ', inequalites)
+    return inequalites
+# elcreate11()
 
 def epscheck(point:sd.Point):
     ###### create generatordict for passed in point
     generatordict = collections.defaultdict(int)
     for ger in point.dcomp:
-        gerstr = ''.join(np.array2string(np.array(ger), separator=','))
+        gerstr = np.array2string(np.array(ger), separator=',')
         # print(gerstr)
         generatordict[gerstr] = 1
     # print(generatordict)
     ###########/
 
-    allepsdict = elcreate()
+    allepsdict = elcreate11()
     for k,v in allepsdict.items(): #k meams d choose k
         # print(k, v)
         if k==2:
@@ -56,15 +83,15 @@ def epscheck(point:sd.Point):
             for vec in v:
                 for i in range(1, len(vec),2): #3 [['[1,1,1]', '[0,0,1]', '[1,1,0]', '[0,1,0]', '[1,0,1]', '[1,0,0]', '[0,1,1]']]
                     # print('i', i)
-                    print('vector: ', vec[0], vec[i], vec[i+1])
+                    # print('vector: ', vec[0], vec[i], vec[i+1])
                     if k*generatordict[vec[0]] + generatordict[vec[i]] + (k-1)*generatordict[vec[i+1]] == k:
                         return False
     return True
 # point1=sd.Point([1,1,0], [[0,1,0], [1,0,0]])
 # point2=sd.Point([1, 1, 1, 4], [[0, 0, 0, 1], [0, 0, 1, 1], [0, 1, 0, 1], [1, 0, 0, 1]])
-point3=sd.Point([1, 1, 3, 4], [[0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1], [0, 1, 1, 1], [1, 0, 0, 1]])
-point4=sd.Point([2, 2, 5, 5], [[0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1], [0, 1, 1, 1], [1, 0, 1, 1], [1, 0, 1, 1]])
-print(epscheck(point4))
+# point3=sd.Point([1, 1, 3, 4], [[0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1], [0, 1, 1, 1], [1, 0, 0, 1]])
+# point4=sd.Point([2, 2, 5, 5], [[0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1], [0, 1, 1, 1], [1, 0, 1, 1], [1, 1, 1, 1]])
+# print(epscheck(point4))
 
 def conemembershipstemplate(point, coef1='', coef2='', const=0, coordsumthresh=dim * k / 2,
                             leqflag=True):  # if leq is in ineqs, leqflag=T
@@ -254,10 +281,10 @@ fivew2com = '[0 0 0 0 0], [0 0 0 0 1], [0 0 0 1 2], [0 0 0 2 2], [0 0 1 1 3], [0
 # [1,4,7,7,9],[1,4,8,8,8],[1,5,5,8,9],[1,5,8,8,9],[1,6,6,9,9],[1,6,8,9,9],[1,7,9,9,9],[1,9,9,9,9],[2,2,2,4,8],
 # [2,2,2,5,8],[2,2,5,8,8],[2,2,6,8,8],[2,3,3,4,9],[2,3,3,6,9],[2,3,5,8,9],[2,3,7,8,9],[2,4,4,5,10],[2,4,4,6,10],
 # [2,4,5,9,9],[2,4,6,8,10],[2,4,7,8,10],[2,4,8,9,9],[2,5,6,9,10],[2,5,8,9,10],[2,6,7,10,10],[2,6,8,10,10],
-# [2,8,10,10,10],[3,3,4,4,10],[3,3,4,7,10],[3,3,5,8,10],[3,3,8,8,10],[3,4,5,5,11],[3,4,5,7,11],
+# [3,3,4,4,10],[3,3,4,7,10],[3,3,5,8,10],[3,3,8,8,10],[3,4,5,5,11],[3,4,5,7,11],
 # [3,4,6,8,11],[3,4,8,8,11],[3,4,9,9,10],[3,5,5,10,10],[3,5,9,9,11],[3,6,6,10,11],[3,7,7,11,11],
 # [4,4,4,4,11],[4,4,4,8,11],[4,4,5,9,11],[4,4,6,6,12],[4,4,6,7,12],[4,4,7,8,12],[4,4,8,8,12],
 # [4,4,10,10,10],[4,5,5,5,12],[4,5,5,8,12],[4,5,5,10,11],[4,5,6,9,12],[4,6,6,10,12],[5,5,5,11,11],
-# [5,5,6,6,13],[5,5,6,8,13],[5,5,7,9,13],[6,6,6,7,14]]))
+# [5,5,6,6,13],[5,5,6,8,13],[5,5,7,9,13],[6,6,6,7,14],[6,6,6,7,14]]))
 
 # print(conemembasmb([1, 2, 4, 7, 7]))

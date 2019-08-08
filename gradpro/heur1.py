@@ -1,5 +1,8 @@
 import numpy as np
 import itertools
+
+from scipy.spatial.qhull import ConvexHull
+
 import gradpro.six003deluxe as sd
 import gradpro.heur1funcs as h1func
 #############ask how to check permut
@@ -60,10 +63,10 @@ def initial():
         vcandval = []
         vcandval.append(vcand[i])
         vcandval.append(vcand[i + 1])
-        vcanddict[''.join(np.array2string(vcand[i], separator=','))] = vcandval
+        vcanddict[np.array2string(vcand[i], separator=',')] = vcandval
     # print('vcandval: ', vcanddict)
     for deterp in determinedpoints:
-        vcanddict.pop(''.join(np.array2string(deterp, separator=',')))
+        vcanddict.pop(np.array2string(deterp, separator=','))
     # print('Udetervcandval: ', vcanddict)
 
     vcandobs = []
@@ -86,9 +89,9 @@ def runheu1():
     nonverticesdict={}
 
     for ver in vertices:
-        verticesdict[''.join(np.array2string(np.array(ver), separator=','))] = ver
+        verticesdict[np.array2string(np.array(ver), separator=',')] = ver
     for nonver in nonvertices:
-        nonverticesdict[''.join(np.array2string(np.array(nonver), separator=','))] = nonver
+        nonverticesdict[np.array2string(np.array(nonver), separator=',')] = nonver
 
     print('verticesdict:', verticesdict, 'len', len(verticesdict))
     print('nonvertices:', nonverticesdict, 'len', len(nonverticesdict))
@@ -98,16 +101,18 @@ def runheu1():
     edges = list(itertools.product(range(2), repeat=dim))
     edgesdict = {}
     for edge in np.array(edges[1:]):
-        edgesdict[''.join(np.array2string(edge, separator=','))] = edge
+        edgesdict[np.array2string(edge, separator=',')] = edge
     print('edges:', edgesdict)
     #############################
 
     undeterpts={}
+    twodksum = dim+1
+    twodk = [0,0]
     for vcandob in vcandobs:  #######starting point
         edgeavail = edgesdict.copy()
 
         for gernerator in vcandob.dcomp:
-            gerstr = ''.join(np.array2string(np.array(gernerator), separator=','))
+            gerstr = np.array2string(np.array(gernerator), separator=',')
             if gerstr in edgesdict.keys():
                 edgeavail.pop(gerstr)
         # print('point', vcandob)
@@ -115,18 +120,21 @@ def runheu1():
 
         for forward in edgeavail.values():
             newpoint = np.add(vcandob.vertex, forward)
-            newpointstr = ''.join(np.array2string(np.array(sorted(newpoint)), separator=','))
+            newpointstr = np.array2string(np.array(sorted(newpoint)), separator=',')
             dcomp = np.append(vcandob.dcomp, [forward], axis=0)  ######add new vertex? back to iteration
-            ptob = sd.Point(newpoint, dcomp)
-            if newpointstr in verticesdict:
+            ptob = sd.Point(newpoint, dcomp, vcandob.vertex)
+            if newpointstr in verticesdict or newpointstr in nonverticesdict or newpointstr in undeterpts\
+                    or sum(np.isin(newpoint, (0, k))) or sum(newpoint) > dim*k/2:
                 continue
-            elif newpointstr in nonverticesdict:
-                continue
-            elif newpointstr in undeterpts:
-                continue
-            elif sum(np.isin(newpoint, (0, k))):
-                continue
-            elif sum(newpoint) > dim*k/2:
+            # elif newpointstr in nonverticesdict:
+            #     continue
+            # elif newpointstr in undeterpts:
+            #     continue
+            # elif sum(np.isin(newpoint, (0, k))):
+            #     continue
+            # elif sum(newpoint) > dim*k/2:
+            #     continue
+            elif sum(newpoint) == dim*k/2 and (newpoint > k/2).sum() >= twodksum:
                 continue
             elif h1func.conemembasmb(newpoint):
                 nonvertices.append(newpoint)
@@ -137,10 +145,17 @@ def runheu1():
                 nonverticesdict[newpointstr] = newpoint
                 continue
             else:
-                undeterpts[newpointstr] = newpoint
-                vcandobs.append(ptob)#will we meet a same pt 1+
-                print('ptob：', ptob)
+                if sum(newpoint) == dim*k/2:
+                    twodksum = (newpoint > k/2).sum()
+                    twodk[0] = newpointstr
+                    twodk[1] = ptob
+                else:
+                    undeterpts[newpointstr] = ptob
+                    vcandobs.append(ptob)#will we meet a same pt 1+
+                # print('ptob：', ptob)
                 # vcanddict[''.join(np.array2string(newpoint, separator=','))] = newpoint, dcomp
+    if twodk[0] != 0:
+        undeterpts[twodk[0]]=twodk[1]
     print('undeterpts ', undeterpts.keys())
     return undeterpts, verticesdict
 ########only vertices no generator
@@ -179,9 +194,35 @@ def verificationall():
     ####################d=5 only
     # vground = sd.picr(dim, 'perv')
     # print('verificationall', len(vground), vground)
-    # resultvcand = {**runheu1()[0], **runheu1()[1]}
-    # print(len(resultvcand), len(vground))
+    # vgrounddict ={}
     # for ver in vground:
-    #     if ''.join(np.array2string(np.array(ver), separator=',')) not in resultvcand:
+    #     vgrounddict[np.array2string(np.array(ver), separator=',')]=ver
+    # resultvcand = runheu1()
+    # resultvcand = {**resultvcand[0], **resultvcand[1]}
+    # print('len(resultvcand), len(vground): ',len(resultvcand), len(vground))
+    # for ver in vground: #check missed
+    #     if np.array2string(np.array(ver), separator=',') not in resultvcand:
     #         print(False, ver)
+    # pts = []
+    # for ptr, ptob in resultvcand.items():#check wrong
+    #     # print('ptsfromstr: ', np.fromstring(ptr[1:-1], dtype=int, sep=','))
+    #     if ptr == np.array2string(np.array([2, 8, 10, 10, 10]), separator=','):
+    #         print('EXIST: ', [2, 8, 10, 10, 10])
+    #         continue
+    #     pts.append(np.fromstring(ptr[1:-1], dtype=int, sep=','))
+    #
+    #     if ptr not in vgrounddict:
+    #         print('wrong point: ', ptob)
+    # pts = np.array(pts)
+    # hull = ConvexHull(pts)
+    # print('hull: ', len(pts[hull.vertices]), pts[hull.vertices], 'end')
+    # ptsdict = {}
+    # for pt in pts[hull.vertices]:
+    #     ptsdict[np.array2string(np.array(pt), separator=',')] = pt
+    # for ver in vground:  #check missed
+    #     if np.array2string(np.array(ver), separator=',') not in ptsdict:
+    #         print(False, ver)
+    # for pstr in ptsdict.keys(): #check wrong
+    #     if pstr not in vgrounddict:
+    #         print('wrong point: ', pstr)
 verificationall()

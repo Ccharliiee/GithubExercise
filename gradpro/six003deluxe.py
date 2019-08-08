@@ -5,19 +5,21 @@ from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial import ConvexHull
 import queue
 import pickle
+import time
 
 class Point(object):
 
-    def __init__(self, vertex, dcomp) -> None:
+    def __init__(self, vertex, dcomp, pre='from last or manual') -> None:
         super().__init__()
         self.vertex = vertex
         self.dcomp = dcomp
+        self.pre = pre
 
     def __str__(self) -> str:
-        return str(self.vertex) + ', ' + str(self.dcomp)
+        return str(self.vertex) + ', ' + str(self.dcomp) + ' pre:' + str(self.pre)
 
     def __repr__(self) -> str:
-        return str(self.vertex) + ', ' + str(self.dcomp)
+        return str(self.vertex) + ', ' + str(self.dcomp) + ' pre:' + str(self.pre)
 
 def funcC1():
     dim = 2
@@ -196,18 +198,26 @@ def funcDcomp5plus(dim):
     gervec.remove((0,)*dim)
     print('ger: ', gervec)
     ptsobnct = {}
+    ptsnct2st = set()
     for r in range(1, len(gervec)+1):
         print('rth:', r)
+        start_time = time.time()
         comb = itertools.combinations(gervec, r)
         for lists in comb:
             # print('lists: ', lists)
             pt = np.array(lists).sum(axis=0, dtype=int)
-            ptsstr = ''.join(np.array2string(pt, separator=','))
-            if ptsstr in ptsobnct:
+            ptsstr = np.array2string(pt, separator=',')
+            if ptsstr in ptsnct2st:
+                continue
+            elif ptsstr in ptsobnct:
                 ptsobnct[ptsstr] = 2
+                ptsnct2st.add(ptsstr)
             else:
                 ptob = Point(pt, np.array(lists))
                 ptsobnct[ptsstr] = ptob
+
+        print('time rth: ', time.time()-start_time)
+
 
     ptsobnct = {key: val for key, val in ptsobnct.items() if val != 2}
     # print('all vertices', ptsob)
@@ -256,9 +266,11 @@ def funcDcomp5plus(dim):
         # print('arr2save', arr2save)
     # print('arr2saveall', len(arr2saveall), arr2saveall)
     return arr2saveall
-# funcDcomp(3)
-# fivedfuncD = funcDcomp(5)
-# picw(5, fivedfuncD[1], 'testperv_dcomp_nct')
+
+
+# res= funcDcomp5plus(4)
+# print(len(res), res)
+# picw(5, funcDcomp5plus(5), 'testperv_dcomp_nct')
 # picw(4, funcDcomp(4, True), 'perv_dcomp')
 # funcC1()
 
@@ -271,11 +283,11 @@ def funcDcomp5plus(dim):
 # [1,4,7,7,9],[1,4,8,8,8],[1,5,5,8,9],[1,5,8,8,9],[1,6,6,9,9],[1,6,8,9,9],[1,7,9,9,9],[1,9,9,9,9],[2,2,2,4,8],
 # [2,2,2,5,8],[2,2,5,8,8],[2,2,6,8,8],[2,3,3,4,9],[2,3,3,6,9],[2,3,5,8,9],[2,3,7,8,9],[2,4,4,5,10],[2,4,4,6,10],
 # [2,4,5,9,9],[2,4,6,8,10],[2,4,7,8,10],[2,4,8,9,9],[2,5,6,9,10],[2,5,8,9,10],[2,6,7,10,10],[2,6,8,10,10],
-# [2,8,10,10,10],[3,3,4,4,10],[3,3,4,7,10],[3,3,5,8,10],[3,3,8,8,10],[3,4,5,5,11],[3,4,5,7,11],
+# [3,3,4,4,10],[3,3,4,7,10],[3,3,5,8,10],[3,3,8,8,10],[3,4,5,5,11],[3,4,5,7,11],
 # [3,4,6,8,11],[3,4,8,8,11],[3,4,9,9,10],[3,5,5,10,10],[3,5,9,9,11],[3,6,6,10,11],[3,7,7,11,11],
 # [4,4,4,4,11],[4,4,4,8,11],[4,4,5,9,11],[4,4,6,6,12],[4,4,6,7,12],[4,4,7,8,12],[4,4,8,8,12],
 # [4,4,10,10,10],[4,5,5,5,12],[4,5,5,8,12],[4,5,5,10,11],[4,5,6,9,12],[4,6,6,10,12],[5,5,5,11,11],
-# [5,5,6,6,13],[5,5,6,8,13],[5,5,7,9,13],[6,6,6,7,14]], 'perv')
+# [5,5,6,6,13],[5,5,6,8,13],[5,5,7,9,13],[6,6,6,7,14],[6,6,6,8,14]], 'perv')
 
 # twodvertices = funcDcomp(5)
 # picw(5, twodvertices[1], 'testperv_dcomp_nct')
